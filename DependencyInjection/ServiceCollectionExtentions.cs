@@ -6,24 +6,31 @@ namespace EnterpriseBlog.DependencyInjection
 {
     public static class ServiceCollectionExtentions
     {
-        public static IServiceCollection RegisterViewModelsByLifeTime(this IServiceCollection services, Assembly[] assemblies)
+        public static IServiceCollection RegisterObjectsByLifeTime(this IServiceCollection services, Assembly[] assemblies)
         {
             var allClasses = assemblies.SelectMany(a => a.GetTypes())
                 .Where(t => t.IsClass && !t.IsAbstract);
 
             foreach (var type in allClasses)
             {
+                var interfaces = type.GetInterfaces()
+                    .Except(new[] { typeof(IScoped), typeof(ITransient), typeof(ISingleton) })
+                    .ToList();
+
                 if (typeof(IScoped).IsAssignableFrom(type))
                 {
-                    services.AddScoped(type);
+                    foreach (var iface in interfaces)
+                        services.AddScoped(iface, type);
                 }
                 else if (typeof(ITransient).IsAssignableFrom(type))
                 {
-                    services.AddTransient(type);
+                    foreach (var iface in interfaces)
+                        services.AddTransient(iface, type);
                 }
                 else if (typeof(ISingleton).IsAssignableFrom(type))
                 {
-                    services.AddSingleton(type);
+                    foreach (var iface in interfaces)
+                        services.AddSingleton(iface, type);
                 }
             }
 

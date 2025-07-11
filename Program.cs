@@ -1,3 +1,4 @@
+using Blazored.LocalStorage;
 using EnterpriseBlog;
 using EnterpriseBlog.DependencyInjection;
 using Microsoft.AspNetCore.Components.Web;
@@ -9,7 +10,10 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-builder.Services.RegisterViewModelsByLifeTime(new[] { typeof(BlogClientAssemblyMarker).Assembly });
+builder.Services.RegisterObjectsByLifeTime(new[] { typeof(BlogClientAssemblyMarker).Assembly });
+
+//3rd party Libraries
+builder.Services.AddBlazoredLocalStorage();
 
 
 await builder.Build().RunAsync();

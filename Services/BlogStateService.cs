@@ -4,7 +4,7 @@ using EnterpriseBlog.Shared;
 
 namespace EnterpriseBlog.Services
 {
-    public class BlogStateService : IScoped
+    public class BlogStateService
     {
         private readonly ILocalStorageService _localStorage;
         private const string StorageKey = "blogs";

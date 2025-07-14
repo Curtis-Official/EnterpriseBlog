@@ -13,10 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\EnterpriseBlog.Shared\EnterpriseBlog.Shared.csproj" />
   </ItemGroup>
 

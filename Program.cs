@@ -1,6 +1,9 @@
 using Blazored.LocalStorage;
 using EnterpriseBlog;
 using EnterpriseBlog.DependencyInjection;
+using EnterpriseBlog.Repositories;
+using EnterpriseBlog.Services;
+using EnterpriseBlog.Services.Interfaces;
 using EnterpriseBlog.Shared;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -11,7 +14,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-builder.Services.RegisterObjectsByLifeTime(new[] { typeof(BlogClientAssemblyMarker).Assembly });
+
 
 //3rd party Libraries
 builder.Services.AddBlazoredLocalStorage();
@@ -21,5 +24,18 @@ builder.Services.Configure<DevOptions>(options =>
 {
     options.IsDevFallbackEnabled = builder.HostEnvironment.IsDevelopment();
 });
+
+
+
+//Greyed out code will not be compiled under current configuration. It will change based on the build configuration (Debug/Release).
+#if DEBUG
+builder.Services.AddScoped<IBlogPostRepository, MockBlogPostRepository>();
+#else
+builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
+#endif
+
+builder.Services.AddScoped<IBlogPostService, BlogPostService>();
+
+builder.Services.RegisterVMsByLifeTime(typeof(Program).Assembly);
 
 await builder.Build().RunAsync();

@@ -5,7 +5,7 @@ using EnterpriseBlog.Shared;
 
 namespace EnterpriseBlog.Services
 {
-    public class BlogPostService : IBlogPostService, IScoped 
+    public class BlogPostService : IBlogPostService 
     {
         private readonly IBlogPostRepository _repo;
 
@@ -14,6 +14,11 @@ namespace EnterpriseBlog.Services
             _repo = repo;
         }
 
+        public async Task<ResponseEnvelope<List<BlogPostDTO>>> GetBlogsAsync()
+        {
+            var blogs = await _repo.GetAllAsync();
+            return ResponseEnvelope<List<BlogPostDTO>>.CreateSuccessEnvelope(blogs);
+        }
         public async Task<ResponseEnvelope<BlogPostDTO>> CreateBlogAsync(BlogPostDTO blog)
         {
             var created = await _repo.CreateAsync(blog);

@@ -1,0 +1,28 @@
+﻿@inject BlogListVM VM
+
+<div class="mb-3">
+    <input class="form-control" placeholder="Search blogs..." @bind="VM.SearchText" />
+</div>
+
+@if (VM.FilteredBlogs is null || !VM.FilteredBlogs.Any())
+{
+    <p>No blogs found.</p>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var blog in VM.FilteredBlogs)
+        {
+            <div class="col-12 col-sm-6 col-lg-4">
+                <BlogCard Blog="blog" />
+            </div>
+        }
+    </div>
+}
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await VM.LoadBlogsAsync();
+    }
+}

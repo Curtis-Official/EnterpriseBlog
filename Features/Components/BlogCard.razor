@@ -1,0 +1,30 @@
+﻿<div class="blog-card">
+    <div class="blog-card-image">
+        <span class="blog-card-image-placeholder">Image Placeholder</span>
+    </div>
+
+    <h3 class="blog-card-title">@Blog?.Title</h3>
+
+    <p class="blog-card-content">
+        @TruncateText(Blog?.BlogContent, 120)
+    </p>
+
+    <div class="blog-card-comments">
+        @((Blog?.Comments?.Count() ?? 0) == 1 
+            ? "1 comment" 
+            : $"{Blog?.Comments?.Count() ?? 0} comments")
+    </div>
+</div>
+
+@code {
+    [Parameter] public BlogPostDTO Blog { get; set; }
+
+    private string TruncateText(string? text, int maxLength)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+            return string.Empty;
+        if (text.Length <= maxLength)
+            return text;
+        return text.Substring(0, maxLength) + "...";
+    }
+}

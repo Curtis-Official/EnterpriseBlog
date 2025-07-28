@@ -1,0 +1,32 @@
+﻿@using EnterpriseBlog.Features.Interfaces
+
+@typeparam TViewModel where TViewModel : IBlogFormFields
+
+<EditForm Model="@VM" OnValidSubmit="@OnValidSubmit">
+
+    <div class="form-group">
+        <label>Title</label>
+        <InputText class="form-control" @bind-Value="VM.Title" />
+    </div>
+
+    <div class="form-group">
+        <label>Subtitle</label>
+        <InputText class="form-control" @bind-Value="VM.Subtitle" />
+    </div>
+
+    <div class="form-group">
+        <label>Content</label>
+        <InputTextArea class="form-control" @bind-Value="VM.BlogContent" />
+    </div>
+
+    @Buttons
+
+</EditForm>
+
+@code {
+    [Parameter] public TViewModel VM { get; set; } = default!;
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+
+
+    [Parameter] public RenderFragment? Buttons { get; set; }
+}

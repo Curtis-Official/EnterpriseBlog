@@ -54,7 +54,7 @@ namespace EnterpriseBlog.Shared
 
         //func vs action
         //func implies side effect without return value 
-        //action implies a computation that returns something 
+        //action implies a return value 
         protected async Task RunSafeAsync(Func<Task> action, [CallerMemberName] string? caller = null)
         {
             try

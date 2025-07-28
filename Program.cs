@@ -27,7 +27,6 @@ builder.Services.Configure<DevOptions>(options =>
 
 
 
-//Greyed out code will not be compiled under current configuration. It will change based on the build configuration (Debug/Release).
 #if DEBUG
 builder.Services.AddScoped<IBlogPostRepository, MockBlogPostRepository>();
 #else

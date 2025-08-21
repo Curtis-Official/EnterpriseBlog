@@ -16,7 +16,7 @@ namespace EnterpriseBlog.Repositories
             IsPublished = true,
             Comments = new List<Comment>
             {
-                new Comment { /* set properties as needed */ }
+                new Comment {  }
             }
         },
         new BlogPostDTO

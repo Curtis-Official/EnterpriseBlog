@@ -1,11 +1,17 @@
 ﻿@page "/"
-
+@inject IndexVM VM
 
 <h1>Welcome to Enterprise Blog</h1>
 <p>Discover the latest posts from our community.</p>
 
-<BlogList />
+<BlogList Blogs="VM.Blogs" />
 
 @code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        await VM.LoadBlogsAsync();
+    }
+
 
 }

@@ -1,7 +1,70 @@
 ﻿@page "/desk"
+@inject DeskVM VM
+@inject NavigationManager _nav 
 
+<h2 class="font-bold mb-4">Writing Desk</h2>
 
+<div class="mb-4">
+    <button class="btn btn-primary" @onclick="NewBlog">New Post</button>
+</div>
+
+@if (VM.IsBusy)
+{
+    <p>Loading...</p>
+}
+else if (!string.IsNullOrEmpty(VM.ErrorMessage))
+{
+    <p class="text-danger">@VM.ErrorMessage</p>
+}
+else
+{
+    <div class="row">
+        <div class="col grid grid-cols gap-8">
+            <div>
+                <h3>Drafts</h3>
+                @if (VM.Drafts.Any())
+                {
+                    <BlogList Blogs="VM.Drafts" Mode="BlogDisplayMode.Table" />
+                }
+                else
+                {
+                    <p>No drafts yet.</p>
+                }
+            </div>
+        </div>
+        <div class="col grid grid-cols gap-8">
+            <div>
+                <h3>Published</h3>
+                @if (VM.Published.Any())
+                {
+                    <BlogList Blogs="VM.Published" Mode="BlogDisplayMode.Table" />
+                }
+                else
+                {
+                    <p>No published blogs yet.</p>
+                }
+            </div>
+        </div>
+    </div>
+  
+   
+}
 
 @code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        await VM.LoadBlogsAsync();
+    }
+
+    private void NewBlog()
+    {
+        _nav.NavigateTo("/desk/write");
+    }
+
+    private void EditBlog(Guid id)
+    {
+        _nav.NavigateTo($"/desk/write/{id}");
+    }
 
 }

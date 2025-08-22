@@ -25,6 +25,15 @@ namespace EnterpriseBlog.Repositories
             Title = "Second Mock Blog",
             Subtitle = "Another subtitle",
             BlogContent = "Another mock blog post for testing.",
+            IsPublished = true,
+            Comments = new List<Comment>()
+        },
+        new BlogPostDTO
+        {
+            Id = Guid.NewGuid(),
+            Title = "Third Mock Blog",
+            Subtitle = "Another subtitle",
+            BlogContent = "Another mock blog post for testing.",
             IsPublished = false,
             Comments = new List<Comment>()
         }

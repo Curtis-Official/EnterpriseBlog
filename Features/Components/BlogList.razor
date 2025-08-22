@@ -1,4 +1,5 @@
 ﻿@inject BlogListVM VM
+@inject NavigationManager _nav
 
 <div class="mb-3">
     <input class="form-control" placeholder="Search blogs..." @bind="VM.SearchText" />
@@ -10,19 +11,73 @@
 }
 else
 {
-    <div class="row g-4">
-        @foreach (var blog in VM.FilteredBlogs)
-        {
-            <div class="col-12 col-sm-6 col-lg-4">
-                <BlogCard Blog="blog" />
-            </div>
-        }
-    </div>
+    @if(Mode == BlogDisplayMode.Cards)
+    {
+        <div class="row g-4">
+            @foreach (var blog in VM.FilteredBlogs)
+            {
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <BlogCard Blog="blog" />
+                </div>
+            }
+        </div>
+    }
+    else if (Mode == BlogDisplayMode.Table)
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var blog in VM.FilteredBlogs)
+                {
+                    <tr>
+                        <td>@blog.Title</td>
+                        <td>
+                            @if (blog.IsPublished)
+                            {
+                                <span class="badge bg-success">Published</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Draft</span>
+                            }
+                        </td>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-outline-primary"
+                                    @onclick="() => EditBlog(blog.Id)">
+                                Edit
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+   
 }
 
 @code {
-    protected override async Task OnInitializedAsync()
+    [Parameter] public IEnumerable<BlogPostDTO> Blogs { get; set; } = Enumerable.Empty<BlogPostDTO>();
+    [Parameter] public BlogDisplayMode Mode { get; set; } = BlogDisplayMode.Cards;
+
+    protected override void OnParametersSet()
     {
-        await VM.LoadBlogsAsync();
+        VM.SetBlogs(Blogs);
+    }
+
+    private void OpenReader(Guid id)
+    {
+        _nav.NavigateTo($"/blogs/{id}");
+    }
+
+    private void EditBlog(Guid id)
+    {
+        _nav.NavigateTo($"/desk/write/{id}");
     }
 }

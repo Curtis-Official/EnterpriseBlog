@@ -1,4 +1,5 @@
 using Blazored.LocalStorage;
+using Blazored.Toast;
 using EnterpriseBlog;
 using EnterpriseBlog.DependencyInjection;
 using EnterpriseBlog.Repositories;
@@ -18,12 +19,14 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 
 //3rd party Libraries
 builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddBlazoredToast();
 
 //Options
 builder.Services.Configure<DevOptions>(options =>
 {
     options.IsDevFallbackEnabled = builder.HostEnvironment.IsDevelopment();
 });
+
 
 
 

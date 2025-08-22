@@ -9,24 +9,20 @@ namespace EnterpriseBlog.Features.Components
     {
         private readonly IBlogPostService _svc;
         public string SearchText { get; set; } = "";
-        public List<BlogPostDTO> Blogs { get; private set; } = new();
+        private List<BlogPostDTO> _blogs = new();
+        public IEnumerable<BlogPostDTO> FilteredBlogs => _blogs.Where(b => string.IsNullOrWhiteSpace(SearchText) ||
+                             b.Title.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
         public BlogListVM(IBlogPostService blogPostService, ILogger<BaseViewModel> logger, IOptions<DevOptions> devOptions) : base(logger, devOptions)
         {
             _svc = blogPostService;
         }
 
-        public async Task LoadBlogsAsync()
-        {
-            var result = await RunSafeAsync(() => _svc.GetBlogsAsync());
+      
 
-            if (result.Success && result.Data is not null)
-            {
-                Blogs = result.Data.ToList();
-            }
-          
+        public void SetBlogs(IEnumerable<BlogPostDTO> blogs)
+        {
+            _blogs = blogs?.ToList() ?? new List<BlogPostDTO>();
         }
 
-        public IEnumerable<BlogPostDTO> FilteredBlogs => Blogs
-                .Where(b => string.IsNullOrWhiteSpace(SearchText) || b.Title.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
     }
 }
